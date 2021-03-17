@@ -1,4 +1,4 @@
-import db from '../lib/models';
+const db = require('../lib/models');
 
 const TRUNCATE_QUERY = `do
 $$
@@ -13,6 +13,8 @@ begin
 end;
 $$`;
 
-export async function cleanDb() {
+async function cleanDb() {
   await db.sequelize.query(TRUNCATE_QUERY);
 }
+
+module.exports = { cleanDb };

@@ -1,3 +1,3 @@
-import db from './lib/models';
+const db = require('./lib/models');
 
 afterAll(() => db.sequelize.close());

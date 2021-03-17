@@ -5,17 +5,11 @@
   "main": "dist/bin/www.js",
   "scripts": {
     "start": "nodemon",
-    "build": "run-s clean transpile",
-    "server": "node ./dist/bin/www",
-    "dev": "cross-env NODE_ENV=development run-s build server",
-    "prod": "cross-env NODE_ENV=production run-s build server",
-    "clean": "rimraf dist",
-    "db:init": "run-s transpile db:migrate",
+    "server": "node ./bin/www",
+    "dev": "cross-env NODE_ENV=development run-s db:migrate server",
+    "prod": "cross-env NODE_ENV=production server",
     "db:migrate": "sequelize db:migrate",
     "db:seed": "sequelize db:seed:all",
-    "transpile": "run-p transpile:*",
-    "transpile:lib": "babel ./lib --out-dir dist/lib --copy-files --source-maps",
-    "transpile:bin": "babel ./bin --out-dir dist/bin --copy-files --source-maps",
     "lint": "run-p lint:*",
     "lint:eslint": "eslint --fix ./lib",
     "lint:prettier": "prettier --write ./lib",
@@ -23,8 +17,16 @@
     "test:watch": "jest --runInBand --watch",
     "heroku-postbuild": "run-s build db:migrate"
   },
+  "old-scripts": {
+    "build": "run-s clean transpile",
+    "clean": "rimraf dist",
+    "db:init": "run-s transpile db:migrate",
+    "transpile": "run-p transpile:*",
+    "transpile:lib": "babel ./lib --out-dir dist/lib --copy-files --source-maps",
+    "transpile:bin": "babel ./bin --out-dir dist/bin --copy-files --source-maps"
+  },
   "nodemonConfig": {
-    "exec": "npm run dev",
+    "exec": "npm run server",
     "watch": [
       "lib/*",
       "public/*"
@@ -40,6 +42,7 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "helmet": "^3.22.0",
     "morgan": "^1.9.1",

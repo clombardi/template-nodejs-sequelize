@@ -4,19 +4,12 @@
  * Module dependencies.
  */
 
-import debugPkg from 'debug';
-import http from 'http';
-import app from '../lib/app';
-import db from '../lib/models';
+const debugPkg = require('debug');
+const http = require('http');
+const app = require('../lib/app');
+const db = require('../lib/models');
 
 const debug = debugPkg('js/www:server');
-
-/**
- * Get port from environment and store in Express.
- */
-
-const port = normalizePort(process.env.PORT || '3001');
-app.set('port', port);
 
 /**
  * Create HTTP server.
@@ -25,8 +18,11 @@ app.set('port', port);
 const server = http.createServer(app);
 
 /**
- * Listen on provided port, on all network interfaces.
+ * Listen on the port set on the app, on all network interfaces.
  */
+
+// cfr. https://stackoverflow.com/questions/25337222/javascript-app-setport-8080-versus-app-listen8080-in-express-js
+const port = app.get('port');
 
 // Run sequelize before listen
 db.sequelize.authenticate().then(() => {
@@ -41,22 +37,6 @@ server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
-
-function normalizePort(val) {
-  const portNum = parseInt(val, 10);
-
-  if (Number.isNaN(portNum)) {
-    // named pipe
-    return val;
-  }
-
-  if (portNum >= 0) {
-    // port number
-    return portNum;
-  }
-
-  return false;
-}
 
 /**
  * Event listener for HTTP server "error" event.
